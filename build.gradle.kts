@@ -1,12 +1,19 @@
 plugins {
-    id("java")
+    `java-library`
+    `maven-publish`
     id("com.diffplug.spotless") version "8.4.0"
     id("pl.allegro.tech.build.axion-release") version "1.18.0"
 }
 
 scmVersion {
     tag {
-        prefix.set("v")
+        prefix.set("")
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
@@ -24,6 +31,18 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+
+            groupId = project.group.toString()
+            artifactId = "poslugator-events"
+            version = project.version.toString()
+        }
+    }
 }
 
 tasks.test {
