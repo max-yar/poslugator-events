@@ -5,32 +5,32 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.time.Instant;
 import java.util.UUID;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "evenType")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "eventType")
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = ExecutionCancelled.class, name = "EXECUTION_CANCELLED"),
-    @JsonSubTypes.Type(value = ExecutionCompleted.class, name = "EXECUTION_COMPLETED"),
-    @JsonSubTypes.Type(value = ExecutionConfirmed.class, name = "EXECUTION_CONFIRMED"),
-    @JsonSubTypes.Type(value = ExecutionRejected.class, name = "EXECUTION_REJECTED"),
-    @JsonSubTypes.Type(value = ExecutionStarted.class, name = "EXECUTION_STARTED"),
-    @JsonSubTypes.Type(value = ProposalAccepted.class, name = "PROPOSAL_ACCEPTED"),
-    @JsonSubTypes.Type(value = ProposalRejected.class, name = "PROPOSAL_REJECTED"),
-    @JsonSubTypes.Type(value = ProposalSent.class, name = "PROPOSAL_SENT"),
-    @JsonSubTypes.Type(value = ReviewCreated.class, name = "REVIEW_CREATED"),
-    @JsonSubTypes.Type(value = TaskCancelled.class, name = "TASK_CANCELLED"),
-    @JsonSubTypes.Type(value = TaskReopened.class, name = "TASK_REOPENED"),
+    @JsonSubTypes.Type(value = ExecutionCancelledEvent.class, name = "EXECUTION_CANCELLED"),
+    @JsonSubTypes.Type(value = ExecutionCompletedEvent.class, name = "EXECUTION_COMPLETED"),
+    @JsonSubTypes.Type(value = ExecutionConfirmedEvent.class, name = "EXECUTION_CONFIRMED"),
+    @JsonSubTypes.Type(value = ExecutionRejectedEvent.class, name = "EXECUTION_REJECTED"),
+    @JsonSubTypes.Type(value = ExecutionStartedEvent.class, name = "EXECUTION_STARTED"),
+    @JsonSubTypes.Type(value = ProposalAcceptedEvent.class, name = "PROPOSAL_ACCEPTED"),
+    @JsonSubTypes.Type(value = ProposalRejectedEvent.class, name = "PROPOSAL_REJECTED"),
+    @JsonSubTypes.Type(value = ProposalSentEvent.class, name = "PROPOSAL_SENT"),
+    @JsonSubTypes.Type(value = ReviewCreatedEvent.class, name = "REVIEW_CREATED"),
+    @JsonSubTypes.Type(value = TaskCancelledEvent.class, name = "TASK_CANCELLED"),
+    @JsonSubTypes.Type(value = TaskReopenedEvent.class, name = "TASK_REOPENED"),
 })
 public sealed interface TaskEvent
-        permits ExecutionCancelled,
-                ExecutionCompleted,
-                ExecutionConfirmed,
-                ExecutionRejected,
-                ExecutionStarted,
-                ProposalAccepted,
-                ProposalRejected,
-                ProposalSent,
-                ReviewCreated,
-                TaskCancelled,
-                TaskReopened {
+        permits ExecutionCancelledEvent,
+        ExecutionCompletedEvent,
+        ExecutionConfirmedEvent,
+        ExecutionRejectedEvent,
+        ExecutionStartedEvent,
+        ProposalAcceptedEvent,
+        ProposalRejectedEvent,
+        ProposalSentEvent,
+        ReviewCreatedEvent,
+        TaskCancelledEvent,
+        TaskReopenedEvent {
     UUID eventId();
 
     String taskId();
