@@ -20,7 +20,6 @@ java {
 group = "com.poslugator"
 version = scmVersion.version
 
-
 repositories {
     mavenCentral()
 }

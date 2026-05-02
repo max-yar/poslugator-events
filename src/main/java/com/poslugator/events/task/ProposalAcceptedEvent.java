@@ -4,5 +4,5 @@ import java.time.Instant;
 import java.util.UUID;
 
 public record ProposalAcceptedEvent(
-        UUID eventId, String taskId, String actorName, String subjectEmail, Instant timestamp)
+        UUID eventId, String taskId, String taskTitle, String actorName, String subjectEmail, Instant timestamp)
         implements TaskEvent {}

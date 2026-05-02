@@ -21,19 +21,21 @@ import java.util.UUID;
 })
 public sealed interface TaskEvent
         permits ExecutionCancelledEvent,
-        ExecutionCompletedEvent,
-        ExecutionConfirmedEvent,
-        ExecutionRejectedEvent,
-        ExecutionStartedEvent,
-        ProposalAcceptedEvent,
-        ProposalRejectedEvent,
-        ProposalSentEvent,
-        ReviewCreatedEvent,
-        TaskCancelledEvent,
-        TaskReopenedEvent {
+                ExecutionCompletedEvent,
+                ExecutionConfirmedEvent,
+                ExecutionRejectedEvent,
+                ExecutionStartedEvent,
+                ProposalAcceptedEvent,
+                ProposalRejectedEvent,
+                ProposalSentEvent,
+                ReviewCreatedEvent,
+                TaskCancelledEvent,
+                TaskReopenedEvent {
     UUID eventId();
 
     String taskId();
+
+    String taskTitle();
 
     String actorName();
 
