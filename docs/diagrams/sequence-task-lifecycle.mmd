@@ -1,0 +1,29 @@
+sequenceDiagram
+    actor Client
+    actor Master
+    participant topic as task-events
+
+    Client->>topic: (task created — no event in this library)
+    Master->>topic: PROPOSAL_SENT
+
+    alt Client accepts
+        Client->>topic: PROPOSAL_ACCEPTED
+        Master->>topic: EXECUTION_STARTED
+        Master->>topic: EXECUTION_COMPLETED
+
+        alt Client confirms
+            Client->>topic: EXECUTION_CONFIRMED
+            Client->>topic: REVIEW_CREATED
+        else Client rejects
+            Client->>topic: EXECUTION_REJECTED
+        else Cancelled mid-execution
+            Client->>topic: EXECUTION_CANCELLED
+        end
+    else Client rejects proposal
+        Client->>topic: PROPOSAL_REJECTED
+    end
+
+    alt Task cancelled at any point
+        Client->>topic: TASK_CANCELLED
+        Client->>topic: TASK_REOPENED
+    end

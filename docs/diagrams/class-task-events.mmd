@@ -1,0 +1,56 @@
+classDiagram
+    class TaskEvent {
+        <<sealed interface>>
+        +UUID eventId()
+        +String taskId()
+        +String taskTitle()
+        +String actorName()
+        +String subjectEmail()
+        +Instant timestamp()
+    }
+
+    class ProposalSentEvent {
+        <<record>>
+    }
+    class ProposalAcceptedEvent {
+        <<record>>
+    }
+    class ProposalRejectedEvent {
+        <<record>>
+    }
+    class ExecutionStartedEvent {
+        <<record>>
+    }
+    class ExecutionCompletedEvent {
+        <<record>>
+    }
+    class ExecutionConfirmedEvent {
+        <<record>>
+    }
+    class ExecutionRejectedEvent {
+        <<record>>
+    }
+    class ExecutionCancelledEvent {
+        <<record>>
+    }
+    class TaskCancelledEvent {
+        <<record>>
+    }
+    class TaskReopenedEvent {
+        <<record>>
+    }
+    class ReviewCreatedEvent {
+        <<record>>
+    }
+
+    TaskEvent <|.. ProposalSentEvent
+    TaskEvent <|.. ProposalAcceptedEvent
+    TaskEvent <|.. ProposalRejectedEvent
+    TaskEvent <|.. ExecutionStartedEvent
+    TaskEvent <|.. ExecutionCompletedEvent
+    TaskEvent <|.. ExecutionConfirmedEvent
+    TaskEvent <|.. ExecutionRejectedEvent
+    TaskEvent <|.. ExecutionCancelledEvent
+    TaskEvent <|.. TaskCancelledEvent
+    TaskEvent <|.. TaskReopenedEvent
+    TaskEvent <|.. ReviewCreatedEvent

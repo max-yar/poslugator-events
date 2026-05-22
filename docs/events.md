@@ -1,0 +1,64 @@
+# Task Events
+
+## Overview
+
+All task domain events implement the `TaskEvent` sealed interface (`com.poslugator.events.task`). Every event is published to the Kafka topic `task-events` (see `Topics.TASK_EVENTS`).
+
+## Common fields
+
+Every `TaskEvent` carries these fields regardless of type:
+
+| Field | Type | Description |
+|---|---|---|
+| `eventId` | `UUID` | Unique identifier for this event instance |
+| `taskId` | `String` | Identifier of the task this event belongs to |
+| `taskTitle` | `String` | Human-readable title of the task at the time of the event |
+| `actorName` | `String` | Display name of the user who triggered the action |
+| `subjectEmail` | `String` | Email of the user who is the target/recipient of the notification |
+| `timestamp` | `Instant` | UTC instant when the event occurred |
+
+## Serialization
+
+The JSON payload includes an `eventType` discriminator field whose value matches the constants listed below. Jackson resolves the correct concrete record type from this field.
+
+Example payload:
+
+```json
+{
+  "eventType": "PROPOSAL_SENT",
+  "eventId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "taskId": "task-123",
+  "taskTitle": "Fix the roof",
+  "actorName": "Ivan Kovalenko",
+  "subjectEmail": "client@example.com",
+  "timestamp": "2026-05-21T10:15:30Z"
+}
+```
+
+## Event catalog
+
+| `eventType` | Java class | Trigger |
+|---|---|---|
+| `PROPOSAL_SENT` | `ProposalSentEvent` | A master submits a proposal on a task |
+| `PROPOSAL_ACCEPTED` | `ProposalAcceptedEvent` | The client accepts a master's proposal |
+| `PROPOSAL_REJECTED` | `ProposalRejectedEvent` | The client rejects a master's proposal |
+| `EXECUTION_STARTED` | `ExecutionStartedEvent` | The master marks execution as started |
+| `EXECUTION_COMPLETED` | `ExecutionCompletedEvent` | The master marks execution as completed |
+| `EXECUTION_CONFIRMED` | `ExecutionConfirmedEvent` | The client confirms the completed execution |
+| `EXECUTION_REJECTED` | `ExecutionRejectedEvent` | The client rejects the completed execution |
+| `EXECUTION_CANCELLED` | `ExecutionCancelledEvent` | An execution is cancelled mid-way |
+| `TASK_CANCELLED` | `TaskCancelledEvent` | The task itself is cancelled |
+| `TASK_REOPENED` | `TaskReopenedEvent` | A cancelled task is reopened |
+| `REVIEW_CREATED` | `ReviewCreatedEvent` | A review is submitted for a completed task |
+
+## Kafka topic
+
+```
+task-events
+```
+
+Defined as the constant `Topics.TASK_EVENTS` in `com.poslugator.events.topics.Topics`.
+
+## Diagram
+
+See [class-task-events.mmd](diagrams/class-task-events.mmd) for the type hierarchy.
