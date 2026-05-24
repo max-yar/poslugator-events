@@ -39,6 +39,8 @@ public sealed interface TaskEvent
 
     String actorName();
 
+    Long subjectId();
+
     String subjectEmail();
 
     Instant timestamp();
