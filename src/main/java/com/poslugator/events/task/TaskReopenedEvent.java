@@ -4,5 +4,11 @@ import java.time.Instant;
 import java.util.UUID;
 
 public record TaskReopenedEvent(
-        UUID eventId, String taskId, String taskTitle, String actorName, String subjectEmail, Instant timestamp)
+        UUID eventId,
+        String taskId,
+        String taskTitle,
+        String actorName,
+        Long subjectId,
+        String subjectEmail,
+        Instant timestamp)
         implements TaskEvent {}

@@ -59,6 +59,12 @@ task-events
 
 Defined as the constant `Topics.TASK_EVENTS` in `com.poslugator.events.topics.Topics`.
 
+## Producer
+
+`poslugator-back` publishes all 11 event types to this topic via `com.poslugator.kafka.TaskEventProducer`
+(`@TransactionalEventListener(phase = AFTER_COMMIT)`). Message key is `event.taskId()`. Both services
+use `poslugator-events:0.1.4`.
+
 ## Diagram
 
 See [class-task-events.mmd](diagrams/class-task-events.mmd) for the type hierarchy.
