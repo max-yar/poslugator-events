@@ -14,8 +14,11 @@ Every `TaskEvent` carries these fields regardless of type:
 | `taskId` | `String` | Identifier of the task this event belongs to |
 | `taskTitle` | `String` | Human-readable title of the task at the time of the event |
 | `actorName` | `String` | Display name of the user who triggered the action |
-| `subjectEmail` | `String` | Email of the user who is the target/recipient of the notification |
+| `subjectId` | `Long` | App user ID of the notification recipient. Stable identity — used by downstream services to key notifications without relying on email (Google-auth users may have no email). |
+| `subjectEmail` | `String` | Email of the notification recipient. Present for email delivery but must not be used as the primary identity key. |
 | `timestamp` | `Instant` | UTC instant when the event occurred |
+
+Record constructor order: `(UUID eventId, String taskId, String taskTitle, String actorName, Long subjectId, String subjectEmail, Instant timestamp)`.
 
 ## Serialization
 
@@ -30,6 +33,7 @@ Example payload:
   "taskId": "task-123",
   "taskTitle": "Fix the roof",
   "actorName": "Ivan Kovalenko",
+  "subjectId": 42,
   "subjectEmail": "client@example.com",
   "timestamp": "2026-05-21T10:15:30Z"
 }
@@ -63,7 +67,10 @@ Defined as the constant `Topics.TASK_EVENTS` in `com.poslugator.events.topics.To
 
 `poslugator-back` publishes all 11 event types to this topic via `com.poslugator.kafka.TaskEventProducer`
 (`@TransactionalEventListener(phase = AFTER_COMMIT)`). Message key is `event.taskId()`. Both services
-use `poslugator-events:0.1.4`.
+use `poslugator-events:0.2.0`.
+
+`subjectId` is set by `TaskEventFactory` to `subject.getId()` when a distinct subject user exists,
+or to `actor.getId()` when the actor is also the notification recipient (self-directed events).
 
 ## Diagram
 
