@@ -40,21 +40,23 @@ dependencies {
 
 ```
 com.poslugator.events
+├── account/       # AccountEvent sealed interface and all concrete event records
 ├── task/          # TaskEvent sealed interface and all concrete event records
 └── topics/        # Topics — Kafka topic name constants
 ```
 
 ## Design decisions
 
-**Sealed interface hierarchy** — `TaskEvent` is a `sealed interface` permitting exactly the known concrete record types. This gives exhaustive `switch` expressions in consumers and prevents third-party subtypes.
+**Sealed interface hierarchy** — `TaskEvent` and `AccountEvent` are `sealed interface` types permitting exactly the known concrete record types. This gives exhaustive `switch` expressions in consumers and prevents third-party subtypes.
 
-**Jackson polymorphism** — `@JsonTypeInfo` + `@JsonSubTypes` on `TaskEvent` embed an `eventType` discriminator field in the JSON payload. Consumers deserialize to `TaskEvent` and receive the correct concrete type.
+**Jackson polymorphism** — `@JsonTypeInfo` + `@JsonSubTypes` on both sealed interfaces embed an `eventType` discriminator field in the JSON payload. Consumers deserialize to the interface type directly and receive the correct concrete record. The discriminator values use SCREAMING_SNAKE_CASE and live in the JSON body; no Kafka type headers are required.
 
-**Records for concrete events** — all 11 event types are `record` implementations of `TaskEvent`. Records are immutable, require no boilerplate, and serialize cleanly with Jackson.
+**Records for concrete events** — all event types are `record` implementations of their respective interface. Records are immutable, require no boilerplate, and serialize cleanly with Jackson.
 
 **No Spring / no runtime dependency** — the library is intentionally framework-agnostic so any JVM service can consume it regardless of their application framework.
 
 ## Diagrams
 
-- [Event type hierarchy](diagrams/class-task-events.mmd)
+- [Task event type hierarchy](diagrams/class-task-events.mmd)
+- [Account event type hierarchy](diagrams/class-account-events.mmd)
 - [Task lifecycle event sequence](diagrams/sequence-task-lifecycle.mmd)

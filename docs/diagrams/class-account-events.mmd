@@ -1,0 +1,41 @@
+classDiagram
+    class AccountEvent {
+        <<sealed interface>>
+        +UUID eventId()
+        +long accountId()
+        +String userName()
+        +Instant timestamp()
+    }
+
+    class AccountCreatedEvent {
+        <<record>>
+        +String email
+    }
+    class VerifyEmailEvent {
+        <<record>>
+        +String verificationToken
+    }
+    class ForgotPasswordEvent {
+        <<record>>
+        +String verificationToken
+    }
+    class ChangePasswordEvent {
+        <<record>>
+    }
+    class AddPasswordEvent {
+        <<record>>
+    }
+    class ChangeEmailEvent {
+        <<record>>
+    }
+    class DeleteAccountEvent {
+        <<record>>
+    }
+
+    AccountEvent <|.. AccountCreatedEvent
+    AccountEvent <|.. VerifyEmailEvent
+    AccountEvent <|.. ForgotPasswordEvent
+    AccountEvent <|.. ChangePasswordEvent
+    AccountEvent <|.. AddPasswordEvent
+    AccountEvent <|.. ChangeEmailEvent
+    AccountEvent <|.. DeleteAccountEvent

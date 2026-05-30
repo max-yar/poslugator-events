@@ -67,7 +67,7 @@ Defined as the constant `Topics.TASK_EVENTS` in `com.poslugator.events.topics.To
 
 `poslugator-back` publishes all 11 event types to this topic via `com.poslugator.kafka.TaskEventProducer`
 (`@TransactionalEventListener(phase = AFTER_COMMIT)`). Message key is `event.taskId()`. Both services
-use `poslugator-events:0.2.0`.
+use `poslugator-events:0.3.x`.
 
 `subjectId` is set by `TaskEventFactory` to `subject.getId()` when a distinct subject user exists,
 or to `actor.getId()` when the actor is also the notification recipient (self-directed events).
