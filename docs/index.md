@@ -7,6 +7,7 @@ Shared event contract library for the ProfiHub platform.
 - [Architecture](architecture.md) — purpose, distribution, technology stack, design decisions
 - [Task Events](events.md) — event catalog, common fields, serialization format, Kafka topic
 - [Account Events](account-events.md) — event catalog, common fields, serialization format, Kafka topic
+- [Chat Events](chat-events.md) — `ChatMessageEvent`, fields, serialization, Kafka topic
 
 ## Diagrams
 
