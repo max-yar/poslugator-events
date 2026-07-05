@@ -13,12 +13,31 @@ Every `TaskEvent` carries these fields regardless of type:
 | `eventId` | `UUID` | Unique identifier for this event instance |
 | `taskId` | `String` | Identifier of the task this event belongs to |
 | `taskTitle` | `String` | Human-readable title of the task at the time of the event |
-| `actorName` | `String` | Display name of the user who triggered the action |
+| `actor` | `UserPreview` | Snapshot of the user who triggered the action — `{ id, firstName, lastName, avatar }`. See below. |
 | `subjectId` | `Long` | App user ID of the notification recipient. Stable identity — used by downstream services to key notifications without relying on email (Google-auth users may have no email). |
 | `subjectEmail` | `String` | Email of the notification recipient. Present for email delivery but must not be used as the primary identity key. |
 | `timestamp` | `Instant` | UTC instant when the event occurred |
 
-Record constructor order: `(UUID eventId, String taskId, String taskTitle, String actorName, Long subjectId, String subjectEmail, Instant timestamp)`.
+Record constructor order: `(UUID eventId, String taskId, String taskTitle, UserPreview actor, Long subjectId, String subjectEmail, Instant timestamp)`.
+
+### `UserPreview` (`com.poslugator.events.task`)
+
+```java
+public record UserPreview(Long id, String firstName, String lastName, String avatar) {}
+```
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `Long` | App user ID of the actor |
+| `firstName` | `String` | — |
+| `lastName` | `String` | — |
+| `avatar` | `String` \| `null` | Public URL of the actor's avatar; `null` if the actor has none |
+
+Since `0.5.0` (replacing the previous `actorName: String` field). The producer,
+`poslugator-back`'s `TaskEventFactory.toPreview(User)`, builds it from the acting `User` entity;
+the consumer, `poslugator-notification`, snapshots it onto the `actor_*` columns of
+`event_stream_notifications` and derives the display name for message text as
+`actor.firstName() + " " + actor.lastName()`.
 
 ## Serialization
 
@@ -32,7 +51,7 @@ Example payload:
   "eventId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "taskId": "task-123",
   "taskTitle": "Fix the roof",
-  "actorName": "Ivan Kovalenko",
+  "actor": { "id": 7, "firstName": "Ivan", "lastName": "Kovalenko", "avatar": null },
   "subjectId": 42,
   "subjectEmail": "client@example.com",
   "timestamp": "2026-05-21T10:15:30Z"
@@ -67,7 +86,7 @@ Defined as the constant `Topics.TASK_EVENTS` in `com.poslugator.events.topics.To
 
 `poslugator-back` publishes all 11 event types to this topic via `com.poslugator.kafka.TaskEventProducer`
 (`@TransactionalEventListener(phase = AFTER_COMMIT)`). Message key is `event.taskId()`. Both services
-use `poslugator-events:0.3.x`.
+use `poslugator-events:0.5.0`.
 
 `subjectId` is set by `TaskEventFactory` to `subject.getId()` when a distinct subject user exists,
 or to `actor.getId()` when the actor is also the notification recipient (self-directed events).
