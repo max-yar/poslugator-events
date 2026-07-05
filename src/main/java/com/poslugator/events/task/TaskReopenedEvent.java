@@ -7,7 +7,7 @@ public record TaskReopenedEvent(
         UUID eventId,
         String taskId,
         String taskTitle,
-        String actorName,
+        UserPreview actor,
         Long subjectId,
         String subjectEmail,
         Instant timestamp)

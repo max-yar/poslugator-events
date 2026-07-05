@@ -37,7 +37,7 @@ public sealed interface TaskEvent
 
     String taskTitle();
 
-    String actorName();
+    UserPreview actor();
 
     Long subjectId();
 
