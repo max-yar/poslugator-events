@@ -73,6 +73,7 @@ Example payload:
 | `TASK_CANCELLED` | `TaskCancelledEvent` | The task itself is cancelled |
 | `TASK_REOPENED` | `TaskReopenedEvent` | A cancelled task is reopened |
 | `REVIEW_CREATED` | `ReviewCreatedEvent` | A review is submitted for a completed task |
+| `PROPOSAL_DELETED` | `ProposalDeletedEvent` | A master withdraws (hard-deletes) their own `PENDING` proposal. Recipient is the task customer, not the master. |
 
 ## Kafka topic
 
@@ -84,9 +85,9 @@ Defined as the constant `Topics.TASK_EVENTS` in `com.poslugator.events.topics.To
 
 ## Producer
 
-`poslugator-back` publishes all 11 event types to this topic via `com.poslugator.kafka.TaskEventProducer`
+`poslugator-back` publishes all 12 event types to this topic via `com.poslugator.kafka.TaskEventProducer`
 (`@TransactionalEventListener(phase = AFTER_COMMIT)`). Message key is `event.taskId()`. Both services
-use `poslugator-events:0.5.0`.
+use `poslugator-events:0.6.0`.
 
 `subjectId` is set by `TaskEventFactory` to `subject.getId()` when a distinct subject user exists,
 or to `actor.getId()` when the actor is also the notification recipient (self-directed events).

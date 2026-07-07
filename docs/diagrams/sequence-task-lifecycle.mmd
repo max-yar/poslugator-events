@@ -21,6 +21,8 @@ sequenceDiagram
         end
     else Client rejects proposal
         Client->>topic: PROPOSAL_REJECTED
+    else Master withdraws proposal
+        Master->>topic: PROPOSAL_DELETED
     end
 
     alt Task cancelled at any point

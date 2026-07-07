@@ -29,6 +29,9 @@ classDiagram
     class ProposalRejectedEvent {
         <<record>>
     }
+    class ProposalDeletedEvent {
+        <<record>>
+    }
     class ExecutionStartedEvent {
         <<record>>
     }
@@ -57,6 +60,7 @@ classDiagram
     TaskEvent <|.. ProposalSentEvent
     TaskEvent <|.. ProposalAcceptedEvent
     TaskEvent <|.. ProposalRejectedEvent
+    TaskEvent <|.. ProposalDeletedEvent
     TaskEvent <|.. ExecutionStartedEvent
     TaskEvent <|.. ExecutionCompletedEvent
     TaskEvent <|.. ExecutionConfirmedEvent
