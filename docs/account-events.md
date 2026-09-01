@@ -79,6 +79,22 @@ account-events
 
 Defined as the constant `Topics.ACCOUNT_EVENTS` in `com.poslugator.events.topics.Topics`.
 
+## Producer and consumer
+
+`poslugator-back` publishes every `AccountEvent` via `com.poslugator.kafka.AccountEventProducer`
+(`@TransactionalEventListener(phase = AFTER_COMMIT)`, message key = `String.valueOf(accountId)`).
+`poslugator-notification`'s `AccountEventConsumer` is the sole consumer.
+
+| `eventType` | Emitted by (`poslugator-back`) | Consumed by (`poslugator-notification`) |
+|---|---|---|
+| `ACCOUNT_CREATED` | `UserService.register` | `UserService.register` — creates the local `users` row |
+| `VERIFY_EMAIL` | `UserService.register` | `EmailMessageBuilders` — `verify-email` template |
+| `FORGOT_PASSWORD` | `AuthService.forgotPassword` | `EmailMessageBuilders` — `reset-password` template |
+| `CHANGE_PASSWORD` | `AuthService.changePassword` | `EmailMessageBuilders` — `notification` template |
+| `ADD_PASSWORD` | `AuthService.addPassword` | `EmailMessageBuilders` — `notification` template |
+| `CHANGE_EMAIL` | not yet wired to a producer | no builder registered — skipped, logged |
+| `DELETE_ACCOUNT` | `UserService.deleteAccount` | `UserService.delete` — hard-deletes the account's notification data |
+
 ## Diagram
 
 See [class-account-events.mmd](diagrams/class-account-events.mmd) for the type hierarchy.
