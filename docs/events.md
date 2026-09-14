@@ -37,7 +37,8 @@ Since `0.5.0` (replacing the previous `actorName: String` field). The producer,
 `poslugator-back`'s `TaskEventFactory.toPreview(User)`, builds it from the acting `User` entity;
 the consumer, `poslugator-notification`, snapshots it onto the `actor_*` columns of
 `event_stream_notifications` and derives the display name for message text as
-`actor.firstName() + " " + actor.lastName()`.
+`actor.firstName() + " " + actor.lastName()`. See
+`poslugator-docs/services/notification/modules/notification.md` § `UserPreview`.
 
 ## Serialization
 

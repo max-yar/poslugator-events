@@ -15,6 +15,8 @@ Every `AccountEvent` carries these fields regardless of type:
 | `userName` | `String` | Display name of the account holder at the time of the event |
 | `timestamp` | `Instant` | UTC instant when the event occurred |
 
+`userName()` is declared on the `AccountEvent` interface itself; all subtypes inherit it.
+
 ## Serialization
 
 `AccountEvent` uses the same Jackson polymorphic pattern as `TaskEvent`. The `@JsonTypeInfo` annotation embeds an `eventType` discriminator field in the JSON payload. Consumers can deserialize directly to `AccountEvent`; Jackson resolves the concrete record from the discriminator value. No Kafka type headers are required — the type is carried in the JSON body.
@@ -94,6 +96,9 @@ Defined as the constant `Topics.ACCOUNT_EVENTS` in `com.poslugator.events.topics
 | `ADD_PASSWORD` | `AuthService.addPassword` | `EmailMessageBuilders` — `notification` template |
 | `CHANGE_EMAIL` | not yet wired to a producer | no builder registered — skipped, logged |
 | `DELETE_ACCOUNT` | `UserService.deleteAccount` | `UserService.delete` — hard-deletes the account's notification data |
+
+See `poslugator-docs/services/notification/architecture.md` § Account-event stream
+and `poslugator-docs/services/back/architecture.md` for the producer/consumer implementations.
 
 ## Diagram
 
