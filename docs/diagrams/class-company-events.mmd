@@ -1,0 +1,24 @@
+classDiagram
+    class CompanyEvent {
+        <<sealed interface>>
+        +UUID eventId()
+        +long companyId()
+        +Instant timestamp()
+    }
+
+    class CompanyCreatedEvent {
+        <<record>>
+        +long ownerId
+    }
+    class CompanyOwnerChangedEvent {
+        <<record>>
+        +long ownerId
+        +long previousOwnerId
+    }
+    class CompanyDeletedEvent {
+        <<record>>
+    }
+
+    CompanyEvent <|.. CompanyCreatedEvent
+    CompanyEvent <|.. CompanyOwnerChangedEvent
+    CompanyEvent <|.. CompanyDeletedEvent

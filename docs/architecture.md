@@ -43,16 +43,17 @@ com.poslugator.events
 ├── account/       # AccountEvent sealed interface and all concrete event records
 ├── task/          # TaskEvent sealed interface and all concrete event records
 ├── chat/          # ChatMessageEvent — plain record, no sealed interface, no Jackson annotations
-└── topics/        # Topics — Kafka topic name constants (TASK_EVENTS, ACCOUNT_EVENTS, CHAT_EVENTS)
+├── company/       # CompanyEvent sealed interface and all concrete event records
+└── topics/        # Topics — Kafka topic name constants (TASK_EVENTS, ACCOUNT_EVENTS, CHAT_EVENTS, COMPANY_EVENTS)
 ```
 
 ## Design decisions
 
-**Sealed interface hierarchies** — both `TaskEvent` and `AccountEvent` are `sealed interface`s permitting exactly the known concrete record types. This gives exhaustive `switch` expressions in consumers and prevents third-party subtypes.
+**Sealed interface hierarchies** — `TaskEvent`, `AccountEvent` and `CompanyEvent` are `sealed interface`s permitting exactly the known concrete record types. This gives exhaustive `switch` expressions in consumers and prevents third-party subtypes.
 
 **Interface-level method on `AccountEvent`** — `userName()` is declared on `AccountEvent` directly (not just on individual records), so consumers can call it without pattern-matching. `TaskEvent` declares its own common accessors directly on the sealed interface too (`eventId()`, `taskId()`, `taskTitle()`, `actor()`, `subjectId()`, `subjectEmail()`, `timestamp()`) — every subtype shares the same shape, unlike `AccountEvent`'s per-subtype extra fields (e.g. `verificationToken`).
 
-**Jackson polymorphism** — `@JsonTypeInfo(use=NAME, property="eventType")` + `@JsonSubTypes` on both sealed interfaces embed an `eventType` discriminator field in the JSON payload with SCREAMING_SNAKE_CASE values. No Kafka type headers are used; the discriminator is always body-embedded.
+**Jackson polymorphism** — `@JsonTypeInfo(use=NAME, property="eventType")` + `@JsonSubTypes` on all three sealed interfaces embed an `eventType` discriminator field in the JSON payload with SCREAMING_SNAKE_CASE values. No Kafka type headers are used; the discriminator is always body-embedded.
 
 **Records for concrete events** — all event types are `record` implementations of their respective sealed interface. Records are immutable, require no boilerplate, and serialize cleanly with Jackson.
 
@@ -64,4 +65,5 @@ com.poslugator.events
 
 - [Task event type hierarchy](diagrams/class-task-events.mmd)
 - [Account event type hierarchy](diagrams/class-account-events.mmd)
+- [Company event type hierarchy](diagrams/class-company-events.mmd)
 - [Task lifecycle event sequence](diagrams/sequence-task-lifecycle.mmd)

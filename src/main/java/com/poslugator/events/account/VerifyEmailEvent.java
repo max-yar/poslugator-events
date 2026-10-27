@@ -4,9 +4,5 @@ import java.time.Instant;
 import java.util.UUID;
 
 public record VerifyEmailEvent(
-        UUID eventId,
-        long accountId,
-        String userName,
-        String verificationToken,
-        Instant timestamp
-) implements AccountEvent {}
+        UUID eventId, long accountId, String userName, String verificationToken, Instant timestamp)
+        implements AccountEvent {}
